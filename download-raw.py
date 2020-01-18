@@ -4,7 +4,9 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import urllib
+# from urllib.parse import parse
+import urllib.parse
+# import urllib
 
 df = pd.DataFrame({
     'a': [1, 2, 3, 4],
@@ -26,7 +28,7 @@ def generate_table(dataframe, max_rows=10):
 
 
 app = dash.Dash(__name__)
-# app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 app.layout = html.Div([
     html.Label('Filter'),
 
@@ -42,7 +44,7 @@ app.layout = html.Div([
         'Download Data',
         id='download-link',
         download="rawdata.csv",
-        href="",
+        # href="",
         target="_blank"
     )
 ])
@@ -69,7 +71,7 @@ def update_table(filter_value):
 def update_download_link(filter_value):
     dff = filter_data(filter_value)
     csv_string = dff.to_csv(index=False, encoding='utf-8')
-    csv_string = "data:text/csv;charset=utf-8," + urllib.quote(csv_string)
+    csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
     return csv_string
 
 
