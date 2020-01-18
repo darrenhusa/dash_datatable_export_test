@@ -70,7 +70,7 @@ layout = html.Div([
     # ),
 
     html.A(
-        'Download Data',
+        html.Button('Download Data', id='download-button'),
         id='download-link',
         download="rawdata.csv",
         # href="",
@@ -82,7 +82,10 @@ layout = html.Div([
     #   html.A(html.Button('Download Data', id='download-button'), id='download-link')
     #   ]),
 
-    html.Div([
-    html.P(id='display-value')
-    ])
+    #diagnostic print - shows contents of DataTable
+    # with and without filtering
+    # removed for production version!
+    # html.Div([
+    # html.P(id='display-value')
+    # ])
 ])

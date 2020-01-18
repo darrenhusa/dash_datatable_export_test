@@ -23,10 +23,10 @@ def update_download_link(derived_virtual_data):
 
     df = pd.DataFrame.from_dict(derived_virtual_data)
 
-    print('inside update download link....')
+    # print('inside update download link....')
     # print(derived_virtual_data)
     # print('')
-    print('')
+    # print('')
     # dff = filter_data(filter_value)
     csv_string = df.to_csv(index=False, encoding='utf-8')
     csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
