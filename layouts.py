@@ -8,16 +8,21 @@ import pandas as pd
 
 data = 'cubs-2016-baseball.csv'
 df_all = pd.read_csv(data)
+print(df_all.columns)
+print('')
 
-# df_all['Last'] = df_all['Name']
-# df_all['First'] =
-
-#remove pitchers
+# remove pitchers
 df = df_all[df_all['Pos'] != 'P'].copy()
+
+new = df['Name'].str.split(expand=True)
+df['First'] = new[0]
+df['Last'] = new[1]
+
+df['BA'] = df['BA'].round(3)
 
 hidden_cols=['Rk','OBP','SLG','OPS','OPS+','TB','GDP','HBP','SH','SF','IBB']
 # all_cols = df.columns
-visible_cols =['Pos','Name','Age','G','PA','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','BA']
+visible_cols =['Pos','Name','Last','First','Age','G','PA','AB','R','H','2B','3B','HR','RBI','SB','CS','BB','SO','BA']
 
 # visible_cols = list(set(all_cols) - set(hidden_cols))
 
