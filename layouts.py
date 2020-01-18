@@ -8,8 +8,8 @@ import pandas as pd
 
 data = 'cubs-2016-baseball.csv'
 df_all = pd.read_csv(data)
-print(df_all.columns)
-print('')
+# print(df_all.columns)
+# print('')
 
 # remove pitchers
 df = df_all[df_all['Pos'] != 'P'].copy()
@@ -38,6 +38,10 @@ layout = html.Div([
         data=df.to_dict('records'),
         filter_action="native",
         sort_action="native",
+
+        #FIX - does NOT work!!!!!
+        # tooltip={'Pos': "Player's position"},
+
         # sort_mode="multi",
         # hidden_columns=['OBP','SLG','OPS','OPS+','TB','GDP','HBP','SH','SF','IBB'],
         # page_action='native',
@@ -58,10 +62,18 @@ layout = html.Div([
         ), # end datatable
 
     # Download Selection
+    # html.A(
+    #     'Download *SELECTED* Data',
+    #     id='download-link',
+    #     href="",
+    #     target="_blank"
+    # ),
+
     html.A(
-        'Download *SELECTED* Data',
+        'Download Data',
         id='download-link',
-        href="",
+        download="rawdata.csv",
+        # href="",
         target="_blank"
     ),
 

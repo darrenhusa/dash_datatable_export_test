@@ -5,12 +5,32 @@ from dash.dependencies import Input, Output
 from app import app
 import urllib.parse
 import pandas as pd
+import urllib.parse
+
 
 @app.callback(
     Output('display-value', 'children'),
     [Input('table', 'derived_virtual_data')])
 def display_value(data):
     return '{}'.format(data)
+
+
+@app.callback(
+    Output('download-link', 'href'),
+    [Input('table', 'derived_virtual_data')])
+def update_download_link(derived_virtual_data):
+    # df = derived_virtual_data.to_dict('records')
+
+    df = pd.DataFrame.from_dict(derived_virtual_data)
+
+    print('inside update download link....')
+    # print(derived_virtual_data)
+    # print('')
+    print('')
+    # dff = filter_data(filter_value)
+    csv_string = df.to_csv(index=False, encoding='utf-8')
+    csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+    return csv_string
 
 # ccsj version
 # should i use the onclick property of the html.button to trigger this action?????
