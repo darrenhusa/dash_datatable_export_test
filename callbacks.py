@@ -1,18 +1,64 @@
 # callbacks.py
 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from app import app
 import urllib.parse
 import pandas as pd
-import urllib.parse
 
+
+data = 'cubs-2016-baseball.csv'
+df_all = pd.read_csv(data)
+# print(df_all.columns)
+# print('')
+
+# remove pitchers
+df = df_all[df_all['Pos'] != 'P'].copy()
+
+new = df['Name'].str.split(expand=True)
+df['First'] = new[0]
+df['Last'] = new[1]
+
+df['BA'] = df['BA'].round(3)
+# print(df)
+# print(df.head())
+# print('')
 
 @app.callback(
     Output('display-value', 'children'),
     [Input('table', 'derived_virtual_data')])
 def display_value(data):
     return '{}'.format(data)
+
+
+@app.callback(Output('table', 'data'),
+              [Input('position_filter', 'value')])
+def build_and_filter_table(pos):
+
+    # df = pd.DataFrame.from_dict(data)
+
+    # print('build_initial_table...')
+    # print(team)
+    # print('')
+    if pos is None:
+        # print('team is None!!!!!')
+        return df.to_dict('records')
+        # return df.to_dict('rows')
+
+    if pos:
+        # print('inside if...')
+        if type(pos) == str:
+            dff = df[df['Pos'].isin([pos])]
+        else:
+            dff = df[df['Pos'].isin(pos)]
+    # else:
+        # print('inside else...')
+        # dff = df
+
+    # print(dff)
+    # print('')
+    # return dff.to_dict('rows')
+    return dff.to_dict('records')
 
 
 @app.callback(
@@ -31,6 +77,32 @@ def update_download_link(derived_virtual_data):
     csv_string = df.to_csv(index=False, encoding='utf-8')
     csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
     return csv_string
+
+# @app.callback([Output('table', 'rows')],
+#               [Input('team_filter', 'value')],
+#               [State('table', 'derived_virtual_data')])
+# @app.callback([Output('table', 'data')],
+#               [Input('team_filter', 'value'),
+#               Input('table', 'derived_virtual_data')])
+# def filter_table(team, derived_virtual_data):
+#
+#     df = pd.DataFrame.from_dict(derived_virtual_data)
+#
+#     print('inside filter table...')
+#     print(team)
+#     print('')
+#
+#     if team:
+#         print('inside if...')
+#         dff = df[df['Pos'].isin([team])]
+#     else:
+#         print('inside else...')
+#         dff = df
+#
+#     print(dff)
+#     print('')
+#     return dff.to_dict('records')
+    # return dff.to_dict('rows')
 
 # ccsj version
 # should i use the onclick property of the html.button to trigger this action?????
