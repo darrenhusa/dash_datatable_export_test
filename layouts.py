@@ -40,9 +40,32 @@ layout = html.Div([
         sort_action="native",
 
         #FIX - does NOT work!!!!!
-        # tooltip={'Pos': "Player's position"},
+        # tooltip_data={'Pos': "Player's position"},
+        # tooltip_data={'property': 'Pos',
+        #               'value': "Player's position"},
 
-        # sort_mode="multi",
+        # tooltip_data=[{
+        #     col: f"0 {col} th row"
+        #     for col in ['Pos', 'Name', 'Last', 'First', 'Age']
+        #     } ],
+
+        # tooltip_data=[{
+        #         col: f"{col} {i} th row"
+        #         for col in _df.columns} for i in range(0,_df.shape[0])],
+        # tooltip={'Pos': "Player's position"},
+        # tooltip={'property': 'Pos',
+        #          'value': "Player's position"},
+        # tooltip={'property': 'Pos',
+        #          'value': 'this is a test tooltip' },
+        # column_conditional_tooltips=[
+        #     {
+        #         'if': {'column_id': 0, "row_index": 0},
+        #         "value": "Player's position",
+        #         "type": "text"
+        #     },
+        # ],
+
+        sort_mode="multi",
         # hidden_columns=['OBP','SLG','OPS','OPS+','TB','GDP','HBP','SH','SF','IBB'],
         # page_action='native',
         # page_current= 0,
