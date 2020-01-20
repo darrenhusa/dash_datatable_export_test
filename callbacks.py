@@ -5,6 +5,17 @@ from dash.dependencies import Input, Output, State
 from app import app
 import urllib.parse
 import pandas as pd
+import re
+
+def extract_name_components(name):
+    pattern = r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)'
+    match = re.search(pattern, name)
+
+    if match:
+        first = match.group(1)
+        last = match.group(2)
+
+    return first, last
 
 
 data = 'cubs-2016-baseball.csv'
@@ -15,10 +26,48 @@ df_all = pd.read_csv(data)
 # remove pitchers
 df = df_all[df_all['Pos'] != 'P'].copy()
 
-new = df['Name'].str.split(expand=True)
-df['First'] = new[0]
-df['Last'] = new[1]
+# https://stackoverflow.com/questions/49247636/python-split-full-name-into-two-variables-with-possibly-multi-word-last-name
+# temp = df['Name'].str.split(" ", n=1, expand=True)
+# df['First'] = temp[0]
+# df['Last'] = temp[1]
 
+# temp = df['Name'].str.split(r'([a-z]+)\s([a-z\s]+)/i', n=1, expand=True)
+# df['First'] = temp[0]
+# df['Last'] = temp[1]
+# df.head()
+# print(temp)
+# print('')
+
+# df.name.str.replace(r'(\w+),\s*(\w+)', r'\2 \1')
+# df['First'], df['Last'] = df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True)
+# temp = df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True)
+# print(temp)
+# print('')
+
+# df['First']  = df['Name'].apply(extract_name_components)[0]
+# df['Last']  = df['Name'].apply(extract_name_components)[1]
+
+df['First'] = df.apply(lambda row: extract_name_components(row['Name'])[0], axis=1)
+df['Last'] = df.apply(lambda row: extract_name_components(row['Name'])[1], axis=1)
+
+# df['First'] = temp[0]
+# df['Last'] = temp[1]
+
+# print(df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True))
+# df['First'] = df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True)[0]
+# df['Last'] = df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True)[1]
+# df['temp'] = df['Name'].str.extract(r'(?P<First>[a-zA-Z]+)\s(?P<Last>[a-zA-Z\s]+)', expand=True)
+# print(df['Last'], df['First'])
+# print(df.temp)
+# print('')
+# want to remove the trailing special charatcers!!!
+# df['temp'] = df['Name'].str.extract(r'([a-z]+)\s([a-z\s]+)/i')
+# df['First'],df['Last'] = df['Name'].str.extract(r'([a-z]+)\s([a-z\s]+)/i')
+# df.head()
+# df['Last'] = df['Name'].str.split(" ", 1)[1]
+# print(temp)
+# df['First'] = temp.str.split(',', 1)
+# df['Last'] = temp[1]
 df['BA'] = df['BA'].round(3)
 # print(df)
 # print(df.head())
